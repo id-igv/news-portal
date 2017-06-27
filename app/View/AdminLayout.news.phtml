@@ -1,0 +1,79 @@
+<!--EDIT-PANEL-->
+<div id="reg-form" class="w3-modal">
+    <div class="w3-modal-content w3-animate-zoom" style="padding:32px">
+        <lable>ID: </lable>
+        <input id="js-edit-id" class="w3-input" type="text" name=""/>
+        <label>Категория: </label>
+        <input id="js-edit-cat-catid" class="w3-input" type="text" name=""/>
+        <label>Заголовок: </label>
+        <input id="js-edit-cat-title" class="w3-input" type="text" name=""/>
+        <label>Тит. изображение: </label>
+        <input id="js-edit-cat-titleimage" class="w3-input" type="text" name=""/>
+        <label>Содержание: </label>
+        <input id="js-edit-cat-content" class="w3-input" type="textarea" name=""/>
+        <label>Просмотров: </label>
+        <input id="js-edit-cat-totalviews" class="w3-input" type="text" name=""/>
+        <label>Создано: </label>
+        <input id="js-edit-cat-created" class="w3-input" type="text" name=""/>
+        <label>ID автора: </label>
+        <input id="js-edit-cat-authorid" class="w3-input" type="text" name=""/>
+        <label>Теги: </label>
+        <input id="js-edit-cat-tagset" class="w3-input" type="text" name=""/>
+    </div>
+</div>
+
+<!--RECORDS-->
+<div class="w3-responsive">
+    <table class="w3-table w3-striped w3-bordered w3-hoverable">
+        <tr>
+            <th class="w3-border-right w3-border-left w3-center">ID</th>
+            <th class="w3-border-right w3-border-left w3-center">Категория</th>
+            <th class="w3-border-right w3-border-left w3-center">Заголовок</th>
+            <th class="w3-border-right w3-border-left w3-center">Тит. изображение</th>
+            <th class="w3-border-right w3-border-left w3-center">Содержание</th>
+            <th class="w3-border-right w3-border-left w3-center">Просмотров</th>
+            <th class="w3-border-right w3-border-left w3-center">Создано</th>
+            <th class="w3-border-right w3-border-left w3-center">ID автора</th>
+            <th class="w3-border-right w3-border-left w3-center">Теги</th>
+            <th class="w3-border-right w3-border-left w3-center">Управление</th>
+        </tr>
+    <?php foreach($newsList as $news) :?>
+        <tr>
+            <td class="w3-border-right w3-border-left"><?=$news->id?></td>
+            <td class="w3-border-right w3-border-left"><?=$news->category_id?></td>
+            <td class="w3-border-right w3-border-left"><?=$news->title?></td>
+            <td class="w3-border-right w3-border-left"><?=$news->title_image?></td>
+            <td class="w3-border-right w3-border-left"><?=substr($news->content, 0, 64)?></td>
+            <td class="w3-border-right w3-border-left"><?=$news->total_views?></td>
+            <td class="w3-border-right w3-border-left"><?=date('Y-m-d', $news->created)?></td>
+            <td class="w3-border-right w3-border-left"><?=$news->author_id?></td>
+            <td class="w3-border-right w3-border-left"><?=$news->tag_set?></td>
+            <td class="w3-border-right w3-border-left">
+                <span js-edit-id="<?=$cat->id?>" class="w3-button w3-transparent w3-right w3-hover-black">&times;</span>
+                <span js-edit-id="<?=$cat->id?>" class="w3-button w3-transparent w3-right w3-hover-black">&#10003;</span>
+            </td>
+        </tr>
+    <?php endforeach;?>
+    </table>
+</div>
+
+<script>
+    $( document ).ready( function() {
+        function handleSuccess(response) {
+            
+        }
+        
+        function handleFail(response) {
+            
+        }
+        
+        $.ajax({
+            type: 'POST',
+            url: '/api/get/news',
+            statusCode: {
+                200: handleSuccess,
+                404: handleFail
+            }
+        });
+    });
+</script>

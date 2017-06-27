@@ -1,0 +1,21 @@
+<div class="w3-row">
+    <!--HEADER-->
+    <div class="w3-panel">
+        <h1><?=$news->title?></h1>
+        <span class="w3-left">Автор: /Имя/</span>
+        <span class="w3-right"><?=date('Y-m-d', $news->created)?></span>
+    </div>
+    
+    <!--TAGS-->
+    <div class="w3-panel">
+        <?php foreach($tags = explode(' ', $news->tag_set) as $tag) :?>
+            <a class="w3-tag w3-teal" href="/search?tags=<?=$tag?>"><?=$tag?></a>
+        <?php endforeach;?>
+    </div>
+    
+    <!--IMAGE-AND-CONTENT-->
+    <div class="w3-panel">
+        <div class="w3-center"><img class="w3-padding-24" src="<?=$news->title_image?>"></img></div>
+        <div class="w3-large"><?=$news->content?></div>
+    </div>
+</div>

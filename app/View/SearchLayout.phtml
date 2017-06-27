@@ -1,0 +1,223 @@
+<!--FILTER-->
+<?php $contains = false;?>
+<!--<div class="w3-row">-->
+<div class="w3-content w3-third" style="padding-left:0px;">
+    <div class="w3-center"><button id="js-filter-submit" class="w3-button w3-block w3-hover-black w3-border w3-light-gray"><b>Поиск</b></button></div>
+    <!--DATE-PICKER-->
+    <div class="w3-container">
+        <h5>Период:</h5>
+        <div class="w3-row">
+            От:<input class="w3-input" type="date" id="js-filter-dfrom" value="<?=isset($params['dfrom']) ? $params['dfrom'] : "2017-01-01" ?>" name="dfrom" required pattern="(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2])-(?:30))|(?:(?:0[13578]|1[02])-31))">
+        </div>
+        <div class="w3-row">
+            До:<input class="w3-input" type="date" id="js-filter-dto" value="<?=isset($params['dto']) ? $params['dto'] : date('Y-m-d', time()) ?>" name="dto" required pattern="(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2])-(?:30))|(?:(?:0[13578]|1[02])-31))">
+        </div>
+    </div>
+    
+    <!--CATEGORY-LIST-->
+    <div class="w3-container">
+        <h5>Категории:</h5>
+        <ul id="#js-cat-list" class="w3-ul">
+        <?php 
+            foreach($categories as $cat) :
+                if (isset($params['category_set'])) {
+                    $contains = in_array($cat->id, $params['category_set']);
+                }
+        ?>
+            <li class="js-cat-item w3-large w3-padding w3-hover-gray <?=$contains ? "w3-light-gray" : null?>" js-selected="<?=$contains ? "true" : "false"?>" js-cat-id="<?=$cat->id?>">
+                <?=$cat->name?>
+            </li>
+        <?php endforeach;?>
+        </ul>
+    </div>
+    
+    <!--TAGS-CLOUD-->
+    <div id="#js-tag-cloud" class="w3-container">
+        <h5>Теги:</h5><p>
+        <?php 
+            $contains = false;
+            foreach($tags as $tag) :
+                if (isset($params['tag_set'])) {
+                    $contains = in_array($tag, $params['tag_set']);
+                }
+        ?>
+            <span class="js-tag-item w3-tag <?=$contains ? "w3-dark-gray" : "w3-teal"?> w3-hover-black" style="margin:3px;" js-selected="<?=$contains ? "true" : "false"?>"><?=$tag?></span>
+        <?php endforeach;?>
+    </p></div>
+</div>
+
+<!--NEWS-LIST-->
+<div class="w3-container w3-twothird">
+    <ul class="w3-ul">
+        <?php foreach($newsList as $news) :?>
+            <li><a href="/news/<?=$news->id?>"><?=$news->title?></a></li>
+        <?php endforeach;?>
+    </ul>
+</div>
+
+<!--PAGINATION-->
+<div class="w3-center"><div class="w3-bar w3-margin-top">
+    <?php
+        $btnCount = count($pagination->buttons);
+        if($btnCount < 6) :
+    ?> 
+        <?php foreach($pagination->buttons as $button) :?>
+            <?php if($button->isActive) :?>
+                <a class="w3-button w3-bar-item" href="/search?<?=$getParams?>page=<?=$button->page?>"><?=$button->text?></a>
+            <?php else :?>
+                <span class="w3-button w3-bar-item"><?=$button->text?></span>
+            <?php endif;?>
+        <?php endforeach;?>
+    <?php else :?>
+        <?php if ($pagination->buttons[0]->isActive) :?>
+            <a class="w3-button w3-bar-item" href="/search?<?=$getParams?>page=<?=$pagination->buttons[0]->page?>"><?=$pagination->buttons[0]->text?></a>
+        <?php else :?>
+            <span class="w3-button w3-bar-item"><?=$pagination->buttons[0]->text?></span>
+        <?php endif;?>
+        <?php if ($pagination->buttons[1]->isActive) :?>
+            <a class="w3-button w3-bar-item" href="/search?<?=$getParams?>page=<?=$pagination->buttons[1]->page?>"><?=$pagination->buttons[1]->text?></a>
+        <?php else :?>
+            <span class="w3-button w3-bar-item"><?=$pagination->buttons[1]->text?></span>
+        <?php endif;?>
+        
+        <div class="w3-dropdown-click">
+            <button id="js-more-pages" class="w3-button">...</button>
+            <table id="js-pages" class="w3-dropdown-content">
+            <?php 
+                $openedtr = 2;
+                for($i = 2; $i < $btnCount-2; $i++) :
+            ?>
+                <?php if ($i === $openedtr) :?>
+                    <tr>
+                <?php endif;?>
+                        <td><a class="w3-button w3-bar-item" href="/search?<?=$getParams?>page=<?=$pagination->buttons[$i]->page?>"><?=$pagination->buttons[$i]->text?></a></td>
+                <?php if (($i - $openedtr) === 5) :?>
+                    </tr>
+                <?php $openedtr = $i + 1; endif;?>
+            <?php endfor;?>
+            </table>
+        </div>
+        
+        <?php if ($pagination->buttons[$btnCount-2]->isActive) :?>
+            <a class="w3-button w3-bar-item" href="/search?<?=$getParams?>page=<?=$pagination->buttons[$btnCount-2]->page?>"><?=$pagination->buttons[$btnCount-2]->text?></a>
+        <?php else :?>
+            <span class="w3-button w3-bar-item"><?=$pagination->buttons[$btnCount-2]->text?></span>
+        <?php endif;?>
+        <?php if ($pagination->buttons[$btnCount-1]->isActive) :?>
+            <a class="w3-button w3-bar-item" href="/search?<?=$getParams?>page=<?=$pagination->buttons[$btnCount-1]->page?>"><?=$pagination->buttons[$btnCount-1]->text?></a>
+        <?php else :?>
+            <span class="w3-button w3-bar-item"><?=$pagination->buttons[$btnCount-1]->text?></span>
+        <?php endif;?>
+        
+    <?php endif;?>
+</div></div>
+<!--</div>-->
+
+<script>
+    $( document ).ready( function() {
+        var selectedCategories = [];
+        var selectedTags = [];
+        
+        $( ".js-cat-item" ).each( function() {
+            var $item = $( this );
+            if ( $item.attr( "js-selected" ) === "true" ) {
+                selectedCategories.push( $item.attr( "js-cat-id" ) );
+            }
+        });
+        
+        $( ".js-tag-item" ).each( function() {
+            var $item = $( this );
+            if ( $item.attr( "js-selected" ) === "true" ) {
+                selectedTags.push( $item.html() );
+            }
+        });
+        
+        console.log(selectedCategories);
+        console.log(selectedTags);
+        
+        $( "#js-more-pages" ).click( function() {
+            var x = document.getElementById("js-pages");
+            
+            if (x.className.indexOf("w3-show") == -1) {
+                x.className += " w3-show";
+            } else {
+                x.className = x.className.replace(" w3-show", "");
+            }
+        });
+        
+        $( ".js-cat-item" ).click( function() {
+            var $catItem = $( this );
+            
+            if ( $catItem.attr( "js-selected" ) === "false" ) {
+                selectedCategories.push( $catItem.attr( "js-cat-id" ) );
+                $catItem.addClass( "w3-light-gray" );
+                $catItem.attr( "js-selected", "true" );
+            } 
+            else if ( $catItem.attr( "js-selected" ) === "true" ) {
+                var i = selectedCategories.indexOf( $catItem.attr( "js-cat-id") );
+                selectedCategories.splice(i, 1);
+                
+                $catItem.removeClass( "w3-light-gray" );
+                $catItem.attr( "js-selected", "false" );
+            }
+            console.log(selectedCategories);
+        });
+        
+        $( ".js-tag-item" ).click( function() {
+            var $tagItem = $( this );
+            
+            if ( $tagItem.attr( "js-selected" ) === "false" ) {
+                selectedTags.push( $tagItem.html() );
+                
+                $tagItem.removeClass( "w3-light-gray" );
+                $tagItem.addClass( "w3-dark-gray" );
+                $tagItem.attr( "js-selected", "true" );
+            } 
+            else if ( $tagItem.attr( "js-selected" ) === "true" ) {
+                var i = selectedTags.indexOf( $tagItem.html() );
+                selectedTags.splice(i, 1);
+                
+                $tagItem.removeClass( "w3-dark-gray" );
+                $tagItem.addClass( "w3-teal" );
+                $tagItem.attr( "js-selected", "false" );
+            }
+            console.log(selectedTags);
+        });
+        
+        $( "#js-filter-submit" ).on( "click", function( event ) {
+            event.preventDefault();
+            
+            var dfrom = $( "#js-filter-dfrom" ).val();
+            var dto = $( "#js-filter-dto" ).val();
+            
+            // fill request string
+            var request = ""; // will be used in get method
+            if (selectedCategories.length > 0) {
+                request += "categories=" + selectedCategories.join( "|" );
+            }
+            
+            if (selectedTags.length > 0) {
+                if (request.length > 0) {
+                    request += "&";
+                }
+                request += "tags=" + selectedTags.join( "|" );
+            }
+            
+            if (dfrom.length >= 8 && dfrom.length <= 10) {
+                if (request.length > 0) {
+                    request += "&";
+                }
+                request += "dfrom=" + dfrom;
+            }
+            
+            if (dto.length >= 8 && dto.length <= 10) {
+                if (request.length > 0) {
+                    request += "&";
+                }
+                request += "dto=" + dto;
+            }
+            
+            window.location.assign("/search?" + request);
+        });
+    });
+</script>

@@ -1,0 +1,7 @@
+<?php if (\Library\Session::get('logedin') === 'true') :?>
+    <h1>Some profile data</h1>
+
+<?php elseif (!\Library\Session::has('logedin')) :?>
+    <h1>User is unauthorozied</h1>
+    
+<?php endif; ?>

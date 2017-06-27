@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        
+        <title>Новости</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>-->
+             <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>-->
+        <script src="/js/ajax.script.js"></script>
+        <style>
+            .w3-sidebar body {font-family: "Roboto", sans-serif}
+            h1,h2,h3,h4,h5,h6,.w3-wide {font-family: "Montserrat", sans-serif;}
+            .display-nonempty:empty{display:none;}
+        </style>
+        
+    </head>
+    
+    <body class="w3-content" style="max-width:1200px">
+        <!--MENU-->
+        <div id="js-menu-bar" name="top" class="w3-bar w3-light-gray w3-border w3-section" style="font-weight:bold">
+            <a href="/" class="w3-bar-item w3-mobile w3-button w3-border-right w3-hover-black">Главная</a>
+            <a href="/search" class="w3-bar-item w3-mobile w3-button w3-border-right w3-hover-black">Новости</a>
+            <a href="javascript:void(0)" class="w3-bar-item w3-mobile w3-button w3-border-right w3-hover-red" onclick="document.getElementById('sub-form').style.display='block'">Подписка</a>
+            
+            <?php if (!\Library\Session::has('logedin')) :?>
+                <a href="javascript:void(0)" class="w3-bar-item w3-mobile w3-button w3-border-right w3-hover-black" onclick="document.getElementById('author-form').style.display='block'">Войти</a>
+                <a href="javascript:void(0)" class="w3-bar-item w3-mobile w3-button w3-border-right w3-hover-black" onclick="document.getElementById('reg-form').style.display='block'">Регистрация</a>
+            <?php endif; ?>
+            <?php if (\Library\Session::has('logedin')) :?>
+                <span class="w3-bar-item w3-mobile"><?=\Library\Session::get('username')?></span>
+                <!--<a href="/profile" class="w3-bar-item w3-button"></a>-->
+                <a href="/logout" class="w3-bar-item w3-mobile w3-button w3-border-right w3-hover-black">Выйти</a>
+            <?php endif; ?>
+            <button class="w3-bar-item w3-mobile w3-button w3-hover-black w3-right"><i class="fa fa-search "></i></button>
+            <input id="js-search" class="w3-bar-item w3-mobile w3-right" type="text" name="searchtag" placeholder="Поиск по тегам"/>
+            <?php if (\Library\Session::has('admin')) :?>
+            <a href="/control" class="w3-bar-item w3-mobile w3-button w3-border-right w3-hover-black">Управление</a>
+            <?php endif;?>
+            <!--<button class="w3-bar-item w3-mobile w3-button w3-border-right w3-border-left w3-hover-black w3-right" onclick="showFilterPanel()"><b>Расширенный поиск</b></button>-->
+        </div>
+        <!--MENU-END-->
+        
+        <!--SEARCH-BAR-->
+        <!--<div class="w3-bar w3-border">-->
+        <!--    <button class="w3-bar-item w3-mobile w3-button w3-border-right w3-light-gray w3-hover-black"><i class="fa fa-search "></i></button>-->
+        <!--    <button class="w3-bar-item w3-mobile w3-button w3-border-right w3-light-gray w3-hover-black" onclick="showFilterPanel()"><b>Расширенный поиск</b></button>-->
+        <!--    <input id="js-search" class="w3-bar-item w3-mobile" type="text" name="searchtag" placeholder="Поиск по тегам"/>-->
+        <!--</div>-->
+        <div class="w3-container w3-row">
+            <ul id="js-search-tags" class="w3-ul w3-right" style="display:none;">
+                <li>Ничего</li>
+            </ul>
+        </div>
+        <!--SEARCH-BAR-END-->
+        <div id="js-go-top" style="position:fixed;bottom:25px;left:25px;"><a href="#top"><i class="fa fa-arrow-circle-o-up w3-jumbo w3-hover-opacity"></i></a></div>
+        <div class="w3-panel w3-pale-red w3-center w3-padding display-nonempty"><?= \Library\Session::getFlash() ?></div>
+        
+        <?= $content ?>
+        
+
+<!------MODAL-AUTH-FORM-------------------------------------------------------->        
+        <div id="author-form" class="w3-modal">
+            <div class="w3-modal-content w3-animate-zoom" style="padding:32px">
+                <form action="/login" method="post" class="w3-container w3-white w3-center">
+                    <i onclick="document.getElementById('author-form').style.display='none'" class="fa fa-remove w3-right w3-button w3-transparent w3-xxlarge w3-display-topright"></i>
+                    <h2 class="w3-wide">Вход</h2>
+                    <p><input class="w3-input w3-border" type="email" placeholder="E-mail" name="email"></p>
+                    <p><input class="w3-input w3-border" type="password" placeholder="Введите пароль" name="pwd"></p>
+                    <button type="submit" class="w3-button w3-padding-large w3-red" >Войти</button>
+                </form>
+            </div>
+        </div>
+<!----------------------------------------------------------------------------->
+<!------MODAL-REGISTER-FORM---------------------------------------------------->        
+        <div id="reg-form" class="w3-modal">
+            <div class="w3-modal-content w3-animate-zoom" style="padding:32px">
+                <form action="/registration" method="post" class="w3-container w3-white w3-center">
+                    <i onclick="document.getElementById('reg-form').style.display='none'" class="fa fa-remove w3-right w3-button w3-transparent w3-xxlarge w3-display-topright"></i>
+                    <h2 class="w3-wide">Регистрация</h2>
+                    <p><input class="w3-input w3-border" type="text" placeholder="Введите имя" name="username" required></p>
+                    <p><input class="w3-input w3-border" type="email" placeholder="Email" name="email" required></p>
+                    <p><input class="w3-input w3-border" type="password" placeholder="Введите пароль" name="pwd" required></p>
+                    <p><input class="w3-input w3-border" type="password" placeholder="Повторите пароль" name="pwdConfirm" required></p>
+                    <button type="submit" class="w3-button w3-padding-large w3-red" >Отправить</button>
+                </form>
+            </div>
+        </div>
+<!----------------------------------------------------------------------------->
+<!------MODAL-SUBSCRIBE-FORM--------------------------------------------------->        
+        <div id="sub-form" class="w3-modal">
+            <div class="w3-modal-content w3-animate-zoom" style="padding:32px">
+                <form action="/subscribe" method="post" class="w3-container w3-white w3-center">
+                    <i onclick="document.getElementById('sub-form').style.display='none'" class="fa fa-remove w3-right w3-button w3-transparent w3-xxlarge w3-display-topright"></i>
+                    <h2 class="w3-wide">Подпишись</h2>
+                    <p><input class="w3-input w3-border" type="email" placeholder="E-mail" name="email"></p>
+                    <p><input class="w3-input w3-border" type="email" placeholder="Имя" name="text"></p>
+                    <button type="submit" class="w3-button w3-padding-large w3-red" >Подписаться</button>
+                </form>
+            </div>
+        </div>
+<!----------------------------------------------------------------------------->
+    </body>
+    <script type="text/javascript" src="/js/main.script.js"></script>
+</html>

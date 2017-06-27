@@ -1,0 +1,34 @@
+<!--RECORDS-->
+<div class="w3-responsive">
+    <table class="w3-table w3-striped w3-bordered w3-hoverable">
+        <tr>
+            <th class="w3-border-right w3-border-left w3-center">ID</th>
+            <th class="w3-border-right w3-border-left w3-center">Категория</th>
+            <th class="w3-border-right w3-border-left w3-center">Заголовок</th>
+            <th class="w3-border-right w3-border-left w3-center">Тит. изображение</th>
+            <th class="w3-border-right w3-border-left w3-center">Содержание</th>
+            <th class="w3-border-right w3-border-left w3-center">Просмотров</th>
+            <th class="w3-border-right w3-border-left w3-center">Создано</th>
+            <th class="w3-border-right w3-border-left w3-center">ID автора</th>
+            <th class="w3-border-right w3-border-left w3-center">Теги</th>
+            <th class="w3-border-right w3-border-left w3-center">Управление</th>
+        </tr>
+    <?php foreach($newsList as $news) :?>
+        <tr>
+            <td class="w3-border-right w3-border-left"><?=$news->id?></td>
+            <td class="w3-border-right w3-border-left"><?=$news->category_id?></td>
+            <td class="w3-border-right w3-border-left"><?=$news->title?></td>
+            <td class="w3-border-right w3-border-left"><?=$news->title_image?></td>
+            <td class="w3-border-right w3-border-left"><?=substr($news->content, 0, 64)?></td>
+            <td class="w3-border-right w3-border-left"><?=$news->total_views?></td>
+            <td class="w3-border-right w3-border-left"><?=date('Y-m-d', $news->created)?></td>
+            <td class="w3-border-right w3-border-left"><?=$news->author_id?></td>
+            <td class="w3-border-right w3-border-left"><?=$news->tag_set?></td>
+            <td class="w3-border-right w3-border-left">
+                <span js-edit-id="<?=$cat->id?>" class="w3-button w3-transparent w3-right w3-hover-black">&times;</span>
+                <span js-edit-id="<?=$cat->id?>" class="w3-button w3-transparent w3-right w3-hover-black">&#10003;</span>
+            </td>
+        </tr>
+    <?php endforeach;?>
+    </table>
+</div>

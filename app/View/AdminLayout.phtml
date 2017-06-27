@@ -1,0 +1,13 @@
+<!--CONTROL-PANEL-->
+<div class="w3-bar w3-border">
+    <a id="js-category-panel" href="/control/categories" class="w3-bar-item w3-mobile w3-button">Категории</a>
+    <a id="js-news-panel" href="/control/news" class="w3-bar-item w3-mobile w3-button">Новости</a>
+</div>
+
+<!--CONTENT-->
+<div class="w3-border">
+<?php if (isset($controlLayout)) : require($controlLayout); ?>
+<?php else :?>
+    <h4>Здравствуй, админ!</h4>
+<?php endif;?>
+</div>

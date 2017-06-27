@@ -1,0 +1,43 @@
+<!--SIDE-SCROLL-->
+<div class="w3-row">
+    <hr>
+    <?php foreach($lastNews as $news) :?>
+        <div class="w3-container w3-animate-opacity js-scroller w3-center">
+            <img src="<?=$news->title_image?>">
+            <div class="w3-container w3-center">
+                <p><a href="/news/<?=$news->id?>"><?=$news->title?></a></p>
+            </div>
+        </div>
+    <?php endforeach;?>
+    <hr>
+</div>
+
+<!--CATEGORIES-->
+<div class="w3-row">
+    <?php foreach($categories as $cat) :?>
+        <div class="w3-container w3-third">
+            <ul class="w3-ul">
+                <li class="w3-padding-small"><a href="/search?categories=<?=$cat['category']->id?>"><?=$cat['category']->name?></a></li>
+                <?php foreach($cat['lastCatNews'] as $news) :?>
+                    <li class="w3-padding-small w3-margin-left"><a href="/news/<?=$news->id?>"><?=$news->title?></a></li>
+                <?php endforeach;?>
+            </ul>
+        </div>
+    <?php endforeach;?>
+</div>
+<script>
+    var myIndex = 0;
+    carousel();
+    
+    function carousel() {
+        var i;
+        var x = document.getElementsByClassName("js-scroller");
+        for (i = 0; i < x.length; i++) {
+           x[i].style.display = "none";  
+        }
+        myIndex++;
+        if (myIndex > x.length) {myIndex = 1}    
+        x[myIndex-1].style.display = "block";  
+        setTimeout(carousel, 2000); // Change image every 2 seconds
+    }
+</script>
